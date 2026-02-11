@@ -81,7 +81,7 @@ def matches_to_csv(matches: Sequence[Mapping[str, Any]], output_path: Path) -> N
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if not rows:
-        output_path.write_text("", encoding="utf-8")
+        output_path.write_text("", encoding="utf-8") 
         return
 
     # Preserve first-seen order to keep column ordering stable across runs.

@@ -1,6 +1,6 @@
 """Data modules (ingest, cleaning, feature prep)."""
 
-from .ingest import (
+from .collection.ingest import (
     FootballDataClient,
     PremierLeagueFetchParams,
     PremierLeagueFetcher,
