@@ -137,6 +137,20 @@ Keep all transformations deterministic and scripted.
 
 ---
 
+## Feature Engineering
+
+* Maintain rolling **pre-match team ratings** (ELO-style or scaled variants) that are
+  updated only after each finished match. For a given fixture, derive features from
+  the ratings as they stood **immediately before kickoff** to avoid leakage.
+* Allow the rating pipeline to ingest historical scorelines (full-time goal delta,
+  home/away splits, recent form windows) so the model can learn relative strength
+  without ever seeing future outcomes at inference time.
+* Expose league-aware attributes (e.g., league identifier, competition strength
+  multipliers) so multi-league datasets remain distinguishable and calibration can
+  adapt per competition.
+
+---
+
 ## Python Project Configuration
 
 Use a `pyproject.toml` for project specs and tooling configuration (dependencies, linting, formatting, tests). Include typical libs: pandas/numpy/scikit-learn/requests and whichever modeling library is chosen.
