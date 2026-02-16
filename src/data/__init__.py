@@ -15,4 +15,3 @@ __all__ = [
     "build_premier_league_fetcher",
     "describe_filters",
 ]
-

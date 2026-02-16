@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 
 from data import PremierLeagueFetchParams, build_premier_league_fetcher
 from data.clean import clean_dataframe, infer_output_path
-from data.features import load_features_from_cleaned, one_hot_encode_text_columns
+from data.features.fbref_elo import FBRefColumnMap, build_fbref_elo_features
+from data.features.features import load_features_from_cleaned, one_hot_encode_text_columns
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FEATURES_DATA_DIR = PROJECT_ROOT / "data" / "features" / "football_data"
@@ -102,6 +103,19 @@ def clean_dataset(raw_csv: Path) -> Path:
 def build_feature_matrix(cleaned_csv: Path) -> Path:
     FEATURES_DATA_DIR.mkdir(parents=True, exist_ok=True)
     df = load_features_from_cleaned(cleaned_csv.name)
+    # Attach Elo features while the raw team/score columns are still available.
+    elo_features = build_fbref_elo_features(
+        df,
+        columns=FBRefColumnMap(
+            date="utcDate",
+            home_team="homeTeam.name",
+            away_team="awayTeam.name",
+            home_goals="score.fullTime.home",
+            away_goals="score.fullTime.away",
+            season=None,
+        ),
+    )
+    df = df.join(elo_features)
     encoded_df, column_map = one_hot_encode_text_columns(df)
     feature_name = cleaned_csv.name.replace("cleaned_", "features_", 1)
     feature_path = FEATURES_DATA_DIR / feature_name

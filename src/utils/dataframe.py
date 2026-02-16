@@ -63,4 +63,20 @@ def load_cleaned_dataframe(path: Path | str) -> pd.DataFrame:
     return standardize_types(df)
 
 
-__all__ = ["standardize_types", "load_cleaned_dataframe"]
+def load_feature_dataframe(path: Path | str) -> pd.DataFrame:
+    """Load an engineered-feature CSV and normalize the shared base columns."""
+
+    df = pd.read_csv(path)
+    standardized = standardize_types(df)
+    missing = [column for column in TEAM_NAME_COLUMNS if column not in standardized.columns]
+    if missing:
+        joined = ", ".join(missing)
+        raise KeyError(f"Feature frame missing required team name columns: {joined}")
+    return standardized
+
+
+__all__ = [
+    "standardize_types",
+    "load_cleaned_dataframe",
+    "load_feature_dataframe",
+]
