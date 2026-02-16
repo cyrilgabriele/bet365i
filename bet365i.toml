@@ -9,6 +9,8 @@ description = "Research-grade football betting pipeline"
 requires-python = ">=3.11"
 dependencies = [
   "requests>=2.31,<3",
+  "soccerdata",
+  "ipykernel",
 ]
 
 [tool.setuptools]
